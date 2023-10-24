@@ -1,10 +1,12 @@
 package com.onlinemarket.rest.dto.product;
 
 import com.onlinemarket.core.model.Product;
+import com.onlinemarket.core.model.enums.ProductCategory;
 
 public class ProductDTO {
     private String id;
-    private String name, description, category;
+    private String name, description;
+    private ProductCategory category;
     private double price;
 
     public ProductDTO(Product product) {
@@ -39,11 +41,11 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public String getCategory() {
+    public ProductCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProductCategory category) {
         this.category = category;
     }
 

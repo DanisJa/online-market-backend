@@ -1,5 +1,6 @@
 package com.onlinemarket.core.model;
 
+import com.onlinemarket.core.model.enums.ProductCategory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,7 +10,8 @@ import java.util.Date;
 public class Product {
     @Id
     private String id;
-    private String name, description, category;
+    private String name, description;
+    private ProductCategory category;
     private double price;
     private Date createdAt;
 
@@ -37,11 +39,11 @@ public class Product {
         this.description = description;
     }
 
-    public String getCategory() {
+    public ProductCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProductCategory category) {
         this.category = category;
     }
 
