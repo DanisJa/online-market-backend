@@ -1,5 +1,6 @@
 package com.onlinemarket.core.model;
 
+import com.onlinemarket.core.model.enums.OrderStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +13,7 @@ public class Order {
     private String id;
     private User customer;
     private List<Product> items;
-    private String status;
+    private OrderStatus status;
     private Date createdAt;
 
     public String getId() {
@@ -31,11 +32,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
