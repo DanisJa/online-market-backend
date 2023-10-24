@@ -2,6 +2,8 @@ package com.onlinemarket.rest.dto.product;
 
 import com.onlinemarket.core.model.Product;
 
+import java.util.Date;
+
 public class ProductRequestDTO {
     private String name, description, category;
     private double price;
@@ -12,6 +14,16 @@ public class ProductRequestDTO {
         this.category = product.getCategory();
         this.description = product.getDescription();
         this.price = product.getPrice();
+    }
+
+    public Product toEntity(){
+        Product product = new Product();
+        product.setCategory(this.category);
+        product.setDescription(this.description);
+        product.setName(this.name);
+        product.setCreatedAt(new Date());
+        product.setPrice(this.price);
+        return product;
     }
 
     public String getName() {

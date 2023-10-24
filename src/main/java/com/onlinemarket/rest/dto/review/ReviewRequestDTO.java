@@ -22,6 +22,16 @@ public class ReviewRequestDTO {
         this.rating = review.getRating();
     }
 
+    public Review toEntity(){
+        Review review = new Review();
+        review.setComment(this.comment);
+        review.setUser(this.user);
+        review.setRating(this.rating);
+        review.setCreatedAt(new Date());
+        review.setProduct(this.product);
+        return review;
+    }
+
     public User getUser() {
         return user;
     }
