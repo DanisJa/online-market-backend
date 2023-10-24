@@ -1,0 +1,8 @@
+configuration:
+  swagger:
+    app: 'Online Market'
+    description: 'Online Market where you can sell anything!'
+    developer: 'Danis Jusić'
+    email: 'danisjusic@icloud.com'
+
+mongodb:
