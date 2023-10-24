@@ -1,5 +1,5 @@
 package com.onlinemarket.core.model.enums;
 
 public enum ReviewRating {
-    ONE, TWO, THREE, FOUR, FIVE
+    BAD, NOT_BAD, GOOD, GREAT, PERFECT
 }

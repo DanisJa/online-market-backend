@@ -3,12 +3,15 @@ package com.onlinemarket.core.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document
 public class Product {
     @Id
     private String id;
     private String name, description, category;
     private double price;
+    private Date createdAt;
 
     public String getId() {
         return id;
@@ -48,5 +51,13 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -9,16 +9,16 @@ import java.util.Date;
 @Document
 public class User {
     @Id
-    private int id;
+    private String id;
     private String username, email, password;
     private UserType userType;
     private Date createdAt;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -52,5 +52,13 @@ public class User {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
