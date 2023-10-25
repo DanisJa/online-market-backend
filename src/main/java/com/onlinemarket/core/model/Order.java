@@ -11,7 +11,7 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
-    private User customer;
+    private User customer, seller;
     private List<Product> items;
     private OrderStatus status;
     private Date createdAt;
@@ -54,5 +54,13 @@ public class Order {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 }

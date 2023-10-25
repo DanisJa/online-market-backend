@@ -5,6 +5,8 @@ import com.onlinemarket.core.model.User;
 public class UserDTO {
     private String id, username, email;
 
+    public UserDTO() {}
+
     public UserDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();

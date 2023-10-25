@@ -1,6 +1,7 @@
 package com.onlinemarket.core.model;
 
 import com.onlinemarket.core.model.enums.ProductCategory;
+import com.onlinemarket.rest.dto.user.UserDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +13,7 @@ public class Product {
     private String id;
     private String name, description;
     private ProductCategory category;
+    private UserDTO seller;
     private double price;
     private Date createdAt;
 
@@ -61,5 +63,13 @@ public class Product {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public UserDTO getSeller() {
+        return seller;
+    }
+
+    public void setSeller(UserDTO seller) {
+        this.seller = seller;
     }
 }

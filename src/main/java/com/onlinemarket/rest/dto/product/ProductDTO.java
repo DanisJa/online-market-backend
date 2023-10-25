@@ -1,12 +1,14 @@
 package com.onlinemarket.rest.dto.product;
 
 import com.onlinemarket.core.model.Product;
+import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.model.enums.ProductCategory;
 
 public class ProductDTO {
     private String id;
     private String name, description;
     private ProductCategory category;
+    private User seller;
     private double price;
 
     public ProductDTO(Product product) {
