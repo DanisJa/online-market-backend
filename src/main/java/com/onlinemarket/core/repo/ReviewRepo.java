@@ -14,5 +14,5 @@ public interface ReviewRepo extends MongoRepository<Review, String> {
     List<Review> findAll();
     Optional<Review> findReviewById(String id);
     List<Review> findReviewsByProductOrderByCreatedAtDesc(Product product);
-    List<Review> findReviewsByUser(User reviewer);
+    List<Review> findReviewsByUserOrderByCreatedAtDesc(User reviewer);
 }
