@@ -2,11 +2,14 @@ package com.onlinemarket.core.service;
 
 import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
 import com.onlinemarket.core.model.Order;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.rest.dto.order.OrderDTO;
 import com.onlinemarket.rest.dto.order.OrderRequestDTO;
+import com.onlinemarket.rest.dto.order.OrderDetailsDTO;
+import com.onlinemarket.rest.dto.product.ProductDTO;
+import com.onlinemarket.rest.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
 import com.onlinemarket.core.repo.OrderRepo;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +21,35 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class OrderService {
     private OrderRepo orderRepo;
+    private ProductService productService;
+    private UserService userService;
 
-    public OrderService(OrderRepo orderRepo) {this.orderRepo = orderRepo;}
+    public OrderService(OrderRepo orderRepo, UserService userService, ProductService productService) {
+        this.orderRepo = orderRepo;
+        this.userService = userService;
+        this.productService = productService;
+    }
 
     public List<OrderDTO> findAll(){
         List<Order> orders = orderRepo.findAll();
-        return orders.stream().map(order -> new OrderDTO(order)).collect(toList());
+        return orders.stream().map(OrderDTO::new).collect(toList());
+    }
+
+    public List<OrderDetailsDTO> findAllWithDetails(){
+        List<Order> orders = orderRepo.findAll();
+        List<OrderDetailsDTO> ordersWithDetails = new ArrayList<>();
+
+        for(Order order : orders){
+            UserDTO customer = userService.findById(order.getCustomerId());
+            List<ProductDTO> items = new ArrayList<>();
+            for(String id : order.getItems()){
+                ProductDTO product = productService.findById(id);
+                items.add(product);
+            }
+            ordersWithDetails.add(new OrderDetailsDTO(order, customer, items));
+        }
+
+        return ordersWithDetails;
     }
 
     public OrderDTO findById(String id){
@@ -34,28 +60,26 @@ public class OrderService {
         return new OrderDTO(order.get());
     }
 
-    public List<OrderDTO> findByCustomer(User customer){
-        List<Order> orderList = orderRepo.findOrdersByCustomer(customer);
+    public List<OrderDetailsDTO> findByCustomerId(@RequestBody String customerId){
+        List<Order> orders = orderRepo.findOrdersByCustomerId(customerId);
 
-        if(orderList.isEmpty()){
+        if(orders.isEmpty()){
             throw new ResourceNotFoundException("Given customer does not have any orders");
         }
 
-        List<OrderDTO> orders = new ArrayList<>();
-        orderList.stream().map(order -> orders.add(new OrderDTO(order))).collect(toList());
-        return orders;
-    }
+        List<OrderDetailsDTO> ordersWithDetails = new ArrayList<>();
 
-    public List<OrderDTO> findBySeller(User seller){
-        List<Order> orderList = orderRepo.findOrdersBySeller(seller);
-
-        if(orderList.isEmpty()){
-            throw new ResourceNotFoundException("Given seller does not have any orders");
+        for(Order order : orders){
+            UserDTO customer = userService.findById(order.getCustomerId());
+            List<ProductDTO> items = new ArrayList<>();
+            for(String id : order.getItems()){
+                ProductDTO product = productService.findById(id);
+                items.add(product);
+            }
+            ordersWithDetails.add(new OrderDetailsDTO(order, customer, items));
         }
 
-        List<OrderDTO> orders = new ArrayList<>();
-        orderList.stream().map(order -> orders.add(new OrderDTO(order))).collect(toList());
-        return orders;
+        return ordersWithDetails;
     }
 
     public OrderDTO addOrder(OrderRequestDTO payload){

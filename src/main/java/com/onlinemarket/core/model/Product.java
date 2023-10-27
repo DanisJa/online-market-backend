@@ -2,6 +2,7 @@ package com.onlinemarket.core.model;
 
 import com.onlinemarket.core.model.enums.ProductCategory;
 import com.onlinemarket.rest.dto.user.UserDTO;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +14,7 @@ public class Product {
     private String id;
     private String name, description;
     private ProductCategory category;
-    private UserDTO seller;
+    private String sellerId;
     private double price;
     private Date createdAt;
 
@@ -65,11 +66,11 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public UserDTO getSeller() {
-        return seller;
+    public String getSellerId() {
+        return sellerId;
     }
 
-    public void setSeller(UserDTO seller) {
-        this.seller = seller;
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
     }
 }

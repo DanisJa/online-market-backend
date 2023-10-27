@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin
+@RequestMapping("/api/products")
 @RestController
-@RequestMapping("api/products")
 public class ProductController {
     private ProductService productService;
 
@@ -39,12 +39,13 @@ public class ProductController {
     }
 
     @GetMapping("/bySeller")
-    public List<ProductDTO> findBySeller(@RequestBody UserDTO seller){
-        return productService.findBySeller(seller);
+    public List<ProductDTO> findBySellerId(@RequestParam String sellerId){
+        return productService.findBySeller(sellerId);
     }
 
     @PostMapping
     public ProductDTO addProduct(@RequestBody ProductRequestDTO payload){
+        ProductDTO product = productService.addProduct(payload);
         return productService.addProduct(payload);
     }
 

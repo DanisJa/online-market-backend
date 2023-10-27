@@ -4,42 +4,55 @@ import com.onlinemarket.core.model.Order;
 import com.onlinemarket.core.model.Product;
 import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.model.enums.OrderStatus;
+import com.onlinemarket.rest.dto.product.ProductDTO;
+import com.onlinemarket.rest.dto.user.UserDTO;
 
 import java.util.Date;
 import java.util.List;
 
 public class OrderRequestDTO {
-    private User customer;
-    private List<Product> items;
+    private String customerId;
+    private List<String> items;
+    private OrderStatus status;
+    private Date createdAt;
 
     public OrderRequestDTO() {}
-    public OrderRequestDTO(User user, List<Product> products){
-        this.customer = user;
-        this.items = products;
+    public OrderRequestDTO(String customerId, List<String> items, OrderStatus status){
+        this.customerId = customerId;
+        this.items = items;
+        this.status = status;
     }
 
     public Order toEntity(){
         Order order = new Order();
         order.setCreatedAt(new Date());
-        order.setCustomer(this.customer);
-        order.setStatus(OrderStatus.PENDING);
+        order.setCustomerId(this.customerId);
+        order.setStatus(this.status);
         order.setItems(this.items);
         return order;
     }
 
-    public User getCustomer() {
-        return customer;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
+    public void setCustomerId(String customer) {
+        this.customerId = customer;
     }
 
-    public List<Product> getItems() {
+    public List<String> getItems() {
         return items;
     }
 
-    public void setItems(List<Product> items) {
+    public void setItems(List<String> items) {
         this.items = items;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

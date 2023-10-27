@@ -22,7 +22,7 @@ public class ProductService {
 
     public List<ProductDTO> findAll() {
         List<Product> products = productRepo.findAll();
-        return products.stream().map(product -> new ProductDTO(product)).collect(toList());
+        return products.stream().map(ProductDTO::new).collect(toList());
     }
 
     public ProductDTO findById(String id){
@@ -57,8 +57,8 @@ public class ProductService {
         return products;
     }
 
-    public List<ProductDTO> findBySeller(UserDTO seller){
-        List<Product> productList = productRepo.findProductsBySeller(seller);
+    public List<ProductDTO> findBySeller(String sellerId){
+        List<Product> productList = productRepo.findProductsBySellerId(sellerId);
 
         if(productList.isEmpty()){
             throw new ResourceNotFoundException("Products with given seller do not exist.");

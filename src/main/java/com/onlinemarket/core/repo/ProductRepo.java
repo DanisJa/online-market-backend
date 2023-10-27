@@ -15,5 +15,5 @@ public interface ProductRepo extends MongoRepository<Product, String> {
     Optional<Product> findProductById(String id);
     List<Product> findProductsByCategory(String category);
     List<Product> findProductsByNameContaining(String nameFilter);
-    List<Product> findProductsBySeller(UserDTO seller);
+    List<Product> findProductsBySellerId(String sellerId);
 }

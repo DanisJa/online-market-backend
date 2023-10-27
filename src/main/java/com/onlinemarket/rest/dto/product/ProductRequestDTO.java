@@ -10,7 +10,7 @@ import java.util.Date;
 public class ProductRequestDTO {
     private String name, description;
     private ProductCategory category;
-    private UserDTO seller;
+    private String sellerId;
     private double price;
 
     public ProductRequestDTO() {}
@@ -19,7 +19,7 @@ public class ProductRequestDTO {
         this.category = product.getCategory();
         this.description = product.getDescription();
         this.price = product.getPrice();
-        this.seller = product.getSeller();
+        this.sellerId = product.getSellerId();
     }
 
     public Product toEntity(){
@@ -29,7 +29,7 @@ public class ProductRequestDTO {
         product.setName(this.name);
         product.setCreatedAt(new Date());
         product.setPrice(this.price);
-        product.setSeller(this.seller);
+        product.setSellerId(this.sellerId);
         return product;
     }
 
@@ -65,11 +65,11 @@ public class ProductRequestDTO {
         this.price = price;
     }
 
-    public UserDTO getSeller() {
-        return seller;
+    public String getSellerId() {
+        return sellerId;
     }
 
-    public void setSeller(UserDTO seller) {
-        this.seller = seller;
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
     }
 }

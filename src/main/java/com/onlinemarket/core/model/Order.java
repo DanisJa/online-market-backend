@@ -1,6 +1,8 @@
 package com.onlinemarket.core.model;
 
 import com.onlinemarket.core.model.enums.OrderStatus;
+import com.onlinemarket.rest.dto.product.ProductDTO;
+import com.onlinemarket.rest.dto.user.UserDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,8 +13,8 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
-    private User customer, seller;
-    private List<Product> items;
+    private String customerId;
+    private List<String> items;
     private OrderStatus status;
     private Date createdAt;
 
@@ -24,12 +26,12 @@ public class Order {
         this.id = id;
     }
 
-    public User getCustomer() {
-        return customer;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public OrderStatus getStatus() {
@@ -40,11 +42,11 @@ public class Order {
         this.status = status;
     }
 
-    public List<Product> getItems() {
+    public List<String> getItems() {
         return items;
     }
 
-    public void setItems(List<Product> items) {
+    public void setItems(List<String> items) {
         this.items = items;
     }
 
@@ -54,13 +56,5 @@ public class Order {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public User getSeller() {
-        return seller;
-    }
-
-    public void setSeller(User seller) {
-        this.seller = seller;
     }
 }
