@@ -47,7 +47,6 @@ public class ReviewService {
 
     public List<ReviewDetailsDTO> findAll(){
         List<Review> reviews = reviewRepo.findAll();
-        System.out.println(reviews.get(0));
         return toReviewDetailsDTOList(reviews);
     }
 

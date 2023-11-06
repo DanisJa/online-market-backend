@@ -13,4 +13,4 @@ spring:
 
 security:
   jwt:
-    secret: 'this-is-my-secret-lets-keep-it-that-way'
+    secret: 'thisismysecretletskeepitthatwaybutthisisstilltooshortforsomereasonsocanthiskeygetanylongernoitcannotiwillstoprighthere'

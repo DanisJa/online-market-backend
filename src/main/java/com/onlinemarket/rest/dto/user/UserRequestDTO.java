@@ -15,12 +15,14 @@ public class UserRequestDTO {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
+        this.userType = user.getUserType();
     }
 
     public User toEntity() {
         User user = new User();
         user.setEmail(this.email);
         user.setUsername(this.username);
+        user.setPassword(this.password);
         user.setUserType(this.userType);
         user.setCreatedAt(new Date());
         return user;
