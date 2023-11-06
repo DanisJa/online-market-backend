@@ -1,7 +1,6 @@
 package com.onlinemarket.rest.dto.order;
 
 import com.onlinemarket.core.model.Order;
-import com.onlinemarket.core.model.Product;
 import com.onlinemarket.core.model.enums.OrderStatus;
 import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.user.UserDTO;

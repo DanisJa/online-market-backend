@@ -1,65 +1,87 @@
 package com.onlinemarket.core.service;
 
 import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
-import com.onlinemarket.core.model.Product;
 import com.onlinemarket.core.model.Review;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.repo.ReviewRepo;
+import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.review.ReviewDTO;
+import com.onlinemarket.rest.dto.review.ReviewDetailsDTO;
 import com.onlinemarket.rest.dto.review.ReviewRequestDTO;
+import com.onlinemarket.rest.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 public class ReviewService {
-    private ReviewRepo reviewRepo;
+    private final ReviewRepo reviewRepo;
+    private ProductService productService;
+    private UserService userService;
 
-    public ReviewService(ReviewRepo reviewRepo){this.reviewRepo = reviewRepo;}
-
-    public List<ReviewDTO> findAll(){
-        List<Review> reviews = reviewRepo.findAll();
-        return reviews.stream().map(review -> new ReviewDTO(review)).collect(toList());
+    public ReviewService(ReviewRepo reviewRepo, ProductService productService, UserService userService) {
+        this.reviewRepo = reviewRepo;
+        this.productService = productService;
+        this.userService = userService;
     }
 
-    public ReviewDTO findById(String id){
+    private List<ReviewDetailsDTO> toReviewDetailsDTOList(List<Review> reviews){
+        List<ReviewDetailsDTO> reviewsWithDetails = new ArrayList<>();
+
+        for(Review review : reviews){
+            UserDTO reviewer = userService.findById(review.getUserId());
+            ProductDTO product = productService.findById(review.getProductId());
+            reviewsWithDetails.add(new ReviewDetailsDTO(review, reviewer, product));
+        }
+
+        return reviewsWithDetails;
+    }
+
+    private ReviewDetailsDTO toReviewDetailsDTO(Review review){
+        UserDTO reviewer = userService.findById(review.getUserId());
+        ProductDTO product = productService.findById(review.getProductId());
+
+        return new ReviewDetailsDTO(review, reviewer, product);
+    }
+
+    public List<ReviewDetailsDTO> findAll(){
+        List<Review> reviews = reviewRepo.findAll();
+        System.out.println(reviews.get(0));
+        return toReviewDetailsDTOList(reviews);
+    }
+
+    public ReviewDetailsDTO findById(String id){
         Optional<Review> review = reviewRepo.findById(id);
         if(review.isEmpty()){
             throw new ResourceNotFoundException("Review with given ID does not exist.");
         }
-        return new ReviewDTO(review.get());
+        return toReviewDetailsDTO(review.get());
     }
 
-    public List<ReviewDTO> findByProduct(Product product){
-        List<Review> reviewList = reviewRepo.findReviewsByProductOrderByCreatedAtDesc(product);
+    public List<ReviewDetailsDTO> findByProduct(String productId){
+        List<Review> reviewList = reviewRepo.findReviewsByProductIdOrderByCreatedAtDesc(productId);
 
         if(reviewList.isEmpty()){
             throw new ResourceNotFoundException("Given product does not have any reviews.");
         }
 
-        List<ReviewDTO> reviews = new ArrayList<>();
-        reviewList.stream().map(review -> reviews.add(new ReviewDTO(review))).collect(toList());
-        return reviews;
+        return toReviewDetailsDTOList(reviewList);
     }
 
-    public List<ReviewDTO> findByUser(User seller){
-        List<Review> reviewList = reviewRepo.findReviewsByUserOrderByCreatedAtDesc(seller);
+    public List<ReviewDetailsDTO> findByUser(String sellerId){
+        List<Review> reviews = reviewRepo.findReviewsByUserIdOrderByCreatedAtDesc(sellerId);
 
-        if(reviewList.isEmpty()){
+        if(reviews.isEmpty()){
             throw new ResourceNotFoundException("Given user does not have any reviews.");
         }
 
-        List<ReviewDTO> reviews = new ArrayList<>();
-        reviewList.stream().map(review -> reviews.add(new ReviewDTO(review))).collect(toList());
-        return reviews;
+        return toReviewDetailsDTOList(reviews);
     }
 
     public ReviewDTO addReview(ReviewRequestDTO payload) {
         Review review = reviewRepo.save(payload.toEntity());
+
         return new ReviewDTO(review);
     }
 

@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface ReviewRepo extends MongoRepository<Review, String> {
     List<Review> findAll();
     Optional<Review> findReviewById(String id);
-    List<Review> findReviewsByProductOrderByCreatedAtDesc(Product product);
-    List<Review> findReviewsByUserOrderByCreatedAtDesc(User reviewer);
+    List<Review> findReviewsByProductIdOrderByCreatedAtDesc(String productId);
+    List<Review> findReviewsByUserIdOrderByCreatedAtDesc(String userId);
 }

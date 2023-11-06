@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(title = "${configuration.swagger.app}", version = "0.0.1", description = "${configuration.swagger.description}"),
+        info = @Info(title = "${configuration.swagger.app}", version = "1.0.0", description = "${configuration.swagger.description}"),
         security = {@SecurityRequirement(name="key")},
         servers = {@Server(url = "/", description = "Default Server URL")}
 )

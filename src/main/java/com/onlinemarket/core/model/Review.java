@@ -1,6 +1,7 @@
 package com.onlinemarket.core.model;
 
 import com.onlinemarket.core.model.enums.ReviewRating;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,9 +11,10 @@ import java.util.Date;
 public class Review {
     @Id
     private String id;
-    private User user;
-    private Product product;
-
+    @NotNull
+    private String userId;
+    @NotNull
+    private String productId;
     private String comment;
     private ReviewRating rating;
     private Date createdAt;
@@ -25,20 +27,20 @@ public class Review {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public Product getProduct() {
-        return product;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getComment() {

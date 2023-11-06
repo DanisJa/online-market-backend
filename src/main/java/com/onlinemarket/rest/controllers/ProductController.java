@@ -45,7 +45,6 @@ public class ProductController {
 
     @PostMapping
     public ProductDTO addProduct(@RequestBody ProductRequestDTO payload){
-        ProductDTO product = productService.addProduct(payload);
         return productService.addProduct(payload);
     }
 

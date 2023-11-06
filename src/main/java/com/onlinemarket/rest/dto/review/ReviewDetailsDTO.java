@@ -1,26 +1,26 @@
 package com.onlinemarket.rest.dto.review;
 
-import com.onlinemarket.core.model.Product;
 import com.onlinemarket.core.model.Review;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.model.enums.ReviewRating;
+import com.onlinemarket.rest.dto.product.ProductDTO;
+import com.onlinemarket.rest.dto.user.UserDTO;
 
 import java.util.Date;
 
-public class ReviewDTO {
+public class ReviewDetailsDTO {
     private String id, comment;
-    private String userId;
-    private String productId;
+    private UserDTO reviewer;
+    private ProductDTO product;
     private ReviewRating reviewRating;
     private Date createdAt;
 
-    public ReviewDTO(Review review){
+    public ReviewDetailsDTO(Review review, UserDTO reviewer, ProductDTO product){
         this.id = review.getId();
         this.comment = review.getComment();
-        this.userId = review.getUserId();
-        this.productId = review.getProductId();
         this.reviewRating = review.getRating();
         this.createdAt = review.getCreatedAt();
+        this.reviewer = reviewer;
+        this.product = product;
     }
 
     public String getId() {
@@ -39,19 +39,21 @@ public class ReviewDTO {
         this.comment = comment;
     }
 
-    public String getUserId() {
-        return userId;
+    public UserDTO getReviewer() {
+        return reviewer;
     }
 
-    public void setUserId(String user) {
-        this.userId = user;
+    public void setReviewer(UserDTO reviewer) {
+        this.reviewer = reviewer;
     }
 
-    public String getProductId() {
-        return productId;
+    public ProductDTO getProduct() {
+        return product;
     }
 
-    public void setProductId(String productId) {this.productId = productId;}
+    public void setProduct(ProductDTO product) {
+        this.product = product;
+    }
 
     public ReviewRating getReviewRating() {
         return reviewRating;

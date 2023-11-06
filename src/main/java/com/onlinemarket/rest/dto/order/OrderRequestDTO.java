@@ -27,7 +27,7 @@ public class OrderRequestDTO {
         Order order = new Order();
         order.setCreatedAt(new Date());
         order.setCustomerId(this.customerId);
-        order.setStatus(this.status);
+        order.setStatus(OrderStatus.PENDING);
         order.setItems(this.items);
         return order;
     }
