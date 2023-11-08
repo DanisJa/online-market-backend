@@ -1,7 +1,7 @@
 package com.onlinemarket.rest.filters;
 
 import com.mongodb.lang.NonNull;
-import com.onlinemarket.core.service.auth.UserDetailsService;
+import com.onlinemarket.core.service.auth.UserAuthService;
 import com.onlinemarket.core.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,7 +24,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private UserDetailsService authService;
+    private UserAuthService authService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest req, @NonNull HttpServletResponse res, @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -38,7 +38,7 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         jwt = header.substring(7);
-        email = jwtService.extractUser(jwt);
+        email = jwtService.extractUserName(jwt);
 
         if(StringUtils.isNotEmpty(email) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = authService.loadUserByUsername(email); // might have to do it with inner class, but this is more maintainable

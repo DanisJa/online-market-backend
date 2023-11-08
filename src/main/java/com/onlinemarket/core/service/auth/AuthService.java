@@ -11,7 +11,7 @@ import com.onlinemarket.rest.dto.user.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepo userRepo;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private JwtService jwtService;
     @Autowired
@@ -34,8 +34,7 @@ public class AuthService {
         Optional<User> userWithSameEmail = userRepo.findUserByEmail(userRequestDTO.getEmail());
 
         if(userWithSameEmail.isEmpty()) {
-            String password = userRequestDTO.getPassword();
-            userRequestDTO.setPassword(passwordEncoder.encode(password));
+            userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
             User user = userRepo.save(userRequestDTO.toEntity());
 
             return new UserDTO(user);
