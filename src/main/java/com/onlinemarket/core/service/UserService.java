@@ -27,7 +27,7 @@ public class UserService {
     }
 
     public UserDTO findById(String id) {
-        Optional<User> userObj = userRepo.findUserById(id);
+        Optional<User> userObj = userRepo.findById(id);
         if(userObj.isEmpty()){
             throw new ResourceNotFoundException("User with given ID doesn't exist.");
         }
