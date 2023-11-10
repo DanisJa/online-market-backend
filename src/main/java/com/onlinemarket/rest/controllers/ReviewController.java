@@ -1,12 +1,10 @@
 package com.onlinemarket.rest.controllers;
 
-import com.onlinemarket.core.model.Product;
-import com.onlinemarket.core.model.Review;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.service.ReviewService;
 import com.onlinemarket.rest.dto.review.ReviewDTO;
 import com.onlinemarket.rest.dto.review.ReviewDetailsDTO;
 import com.onlinemarket.rest.dto.review.ReviewRequestDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/reviews")
+@SecurityRequirement(name = "jwt-auth")
 public class ReviewController {
     private final ReviewService reviewService;
 

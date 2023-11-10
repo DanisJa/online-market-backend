@@ -1,13 +1,9 @@
 package com.onlinemarket.rest.controllers;
 
-import com.onlinemarket.core.model.Product;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.service.ProductService;
 import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.product.ProductRequestDTO;
-import com.onlinemarket.rest.dto.user.UserDTO;
-import com.onlinemarket.rest.dto.user.UserRequestDTO;
-import org.apache.coyote.Response;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +13,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api/products")
 @RestController
+@SecurityRequirement(name = "jwt-auth")
 public class ProductController {
     private ProductService productService;
 

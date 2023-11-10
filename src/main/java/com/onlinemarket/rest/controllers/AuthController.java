@@ -5,12 +5,14 @@ import com.onlinemarket.rest.dto.user.UserDTO;
 import com.onlinemarket.rest.dto.user.UserLoginDTO;
 import com.onlinemarket.rest.dto.user.UserLoginRequestDTO;
 import com.onlinemarket.rest.dto.user.UserRequestDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
+@SecurityRequirement(name = "jwt-auth")
 public class AuthController {
     private final AuthService authService;
 
