@@ -10,3 +10,7 @@ spring:
     mongodb:
       database: 'online-market'
       uri: 'mongodb+srv://danisjusic:bfmA4y1EhMmxS2Ip@webengineering.oxxlfww.mongodb.net/?retryWrites=true&w=majority'
+
+security:
+  jwt:
+    secret: 'thisismysecretletskeepitthatwaybutthisisstilltooshortforsomereasonsocanthiskeygetanylongernoitcannotiwillstoprighthere'

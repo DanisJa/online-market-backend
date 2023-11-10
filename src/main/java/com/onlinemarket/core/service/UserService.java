@@ -35,13 +35,14 @@ public class UserService {
     }
 
     public UserDTO addUser (UserRequestDTO payload) {
-        //Check if another user with same mail exists
+        //Check if another user with same mail or username exists
         Optional<User> userWithPayloadMail = userRepo.findUserByEmail(payload.getEmail());
-        if(userWithPayloadMail.isEmpty()){
+        Optional<User> userWithPayloadUsername = userRepo.findUserByUsername(payload.getUsername());
+        if(userWithPayloadMail.isEmpty() || userWithPayloadUsername.isEmpty()){
             User user = userRepo.save(payload.toEntity());
             return new UserDTO(user);
         }
-        throw new UserAlreadyExistsException("User with given email already exists.");
+        throw new UserAlreadyExistsException("User with given email or username already exists.");
     }
 
     public UserDTO updateUser (String id, UserRequestDTO payload) {

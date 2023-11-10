@@ -1,10 +1,10 @@
 package com.onlinemarket.rest.controllers;
 
-import com.onlinemarket.core.model.Product;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.service.ReviewService;
 import com.onlinemarket.rest.dto.review.ReviewDTO;
+import com.onlinemarket.rest.dto.review.ReviewDetailsDTO;
 import com.onlinemarket.rest.dto.review.ReviewRequestDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,24 +12,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin
-@RequestMapping("/api/reviews")
 @RestController
+@RequestMapping("/api/reviews")
+@SecurityRequirement(name = "jwt-auth")
 public class ReviewController {
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {this.reviewService = reviewService;}
 
     @GetMapping
-    public List<ReviewDTO> findAll(){return reviewService.findAll();}
+    public List<ReviewDetailsDTO> findAll(){return reviewService.findAll();}
 
     @GetMapping("/{id}")
-    public ReviewDTO findById(@PathVariable String id){return reviewService.findById(id);}
+    public ReviewDetailsDTO findById(@PathVariable String id){return reviewService.findById(id);}
 
     @GetMapping("/byProduct")
-    public List<ReviewDTO> findByProduct(@RequestBody Product product){return reviewService.findByProduct(product);}
+    public List<ReviewDetailsDTO> findByProduct(@RequestParam String productId){return reviewService.findByProduct(productId);}
 
     @GetMapping("/byUser")
-    public List<ReviewDTO> findByUser(@RequestBody User seller){return reviewService.findByUser(seller);}
+    public List<ReviewDetailsDTO> findByUser(@RequestParam String userId){return reviewService.findByUser(userId);}
 
     @PostMapping
     public ReviewDTO addReview(@RequestBody ReviewRequestDTO payload){return reviewService.addReview(payload);}
@@ -39,6 +40,8 @@ public class ReviewController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReview(@PathVariable String id){
+        reviewService.deleteReview(id);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 }
+

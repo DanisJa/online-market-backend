@@ -4,6 +4,7 @@ import com.onlinemarket.core.service.OrderService;
 import com.onlinemarket.rest.dto.order.OrderDTO;
 import com.onlinemarket.rest.dto.order.OrderDetailsDTO;
 import com.onlinemarket.rest.dto.order.OrderRequestDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("api/orders")
 @RestController
+@SecurityRequirement(name = "jwt-auth")
 public class OrderController {
     private OrderService orderService;
 

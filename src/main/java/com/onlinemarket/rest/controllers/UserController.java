@@ -3,6 +3,7 @@ package com.onlinemarket.rest.controllers;
 import com.onlinemarket.core.service.UserService;
 import com.onlinemarket.rest.dto.user.UserDTO;
 import com.onlinemarket.rest.dto.user.UserRequestDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api/users")
 @RestController
+@SecurityRequirement(name = "jwt-auth")
 public class UserController {
     private UserService userService;
 
@@ -24,9 +26,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDTO findById(@PathVariable String id) {return userService.findById(id);}
-
-    @PostMapping("/register")
-    public UserDTO addUser(@RequestBody UserRequestDTO payload) {return userService.addUser(payload);}
 
     @PutMapping("/{id}")
     public UserDTO updateUser(@RequestBody UserRequestDTO payload, @PathVariable String id) {return userService.updateUser(id, payload);}
