@@ -18,6 +18,6 @@ public class UserAuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email){
-        return userRepo.findUserByEmail(email).orElse(userRepo.findUserByUsername(email).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        return userRepo.findByUsernameOrEmail(email).orElseThrow(() ->new UsernameNotFoundException("User "));
     }
 }

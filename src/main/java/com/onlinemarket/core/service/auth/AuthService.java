@@ -11,7 +11,7 @@ import com.onlinemarket.rest.dto.user.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepo userRepo;
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtService jwtService;
     @Autowired
@@ -44,8 +44,11 @@ public class AuthService {
     }
 
     public UserLoginDTO signIn(UserLoginRequestDTO loginRequestDTO) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
-        User user = userRepo.findUserByEmail(loginRequestDTO.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User with given email does not exist."));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword())
+        );
+        User user = userRepo.findUserByEmail(loginRequestDTO.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("This user does not exist."));
         String jwt = jwtService.generateToken(user);
 
         return new UserLoginDTO(jwt);
