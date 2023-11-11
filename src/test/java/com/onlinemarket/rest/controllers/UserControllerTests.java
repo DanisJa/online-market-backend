@@ -4,11 +4,13 @@ import com.jayway.jsonpath.JsonPath;
 import com.onlinemarket.core.model.enums.UserType;
 import com.onlinemarket.core.service.UserService;
 import com.onlinemarket.core.service.auth.JwtService;
+import com.onlinemarket.core.service.auth.UserAuthService;
 import com.onlinemarket.rest.config.SecurityConfig;
 import com.onlinemarket.rest.dto.user.UserDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,8 +27,11 @@ import java.util.List;
 @WebMvcTest(UserController.class)
 @Import(SecurityConfig.class)
 public class UserControllerTests {
-    @MockBean
+    @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    UserAuthService authService;
 
     @MockBean
     UserService userService;
@@ -38,7 +43,7 @@ public class UserControllerTests {
     AuthenticationProvider authenticationProvider;
 
     @Test
-    void shouldReturnAllBooks() throws Exception {
+    void shouldReturnAllUsers() throws Exception {
         UserDTO user1 = new UserDTO();
         user1.setEmail("test@test.test");
         user1.setUsername("test");
@@ -61,7 +66,7 @@ public class UserControllerTests {
         Assertions.assertNotEquals(1, (Integer) JsonPath.read(response, "$.length()"));
         Assertions.assertEquals(user1.getEmail(), JsonPath.read(response, "$.[0].email"));
         Assertions.assertEquals(user1.getUsername(), JsonPath.read(response, "$.[0].username"));
-        Assertions.assertEquals(user1.getUserType(), JsonPath.read(response, "$.[0].userType"));
+        Assertions.assertEquals("USER", JsonPath.read(response, "$.[0].userType"));
         Assertions.assertEquals(user2.getUsername(), JsonPath.read(response, "$.[1].username"));
     }
 }

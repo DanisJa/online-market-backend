@@ -1,6 +1,6 @@
 package com.onlinemarket.core.service.auth;
 
-import com.onlinemarket.core.exceptions.auth.InvalidCredentialsException;
+import com.onlinemarket.core.exceptions.auth.UserAlreadyExistsException;
 import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
 import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.repo.UserRepo;
@@ -10,6 +10,7 @@ import com.onlinemarket.rest.dto.user.UserLoginRequestDTO;
 import com.onlinemarket.rest.dto.user.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,13 +41,14 @@ public class AuthService {
             return new UserDTO(user);
         }
 
-        throw new InvalidCredentialsException("User with same mail already exists.");
+        throw new UserAlreadyExistsException("User with same mail already exists.");
     }
 
-    public UserLoginDTO signIn(UserLoginRequestDTO loginRequestDTO) {
+    public UserLoginDTO signIn(UserLoginRequestDTO loginRequestDTO) throws BadCredentialsException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword())
         );
+
         User user = userRepo.findUserByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("This user does not exist."));
         String jwt = jwtService.generateToken(user);
