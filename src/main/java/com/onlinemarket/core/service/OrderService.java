@@ -2,13 +2,13 @@ package com.onlinemarket.core.service;
 
 import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
 import com.onlinemarket.core.model.Order;
+import com.onlinemarket.core.repo.OrderRepo;
 import com.onlinemarket.rest.dto.order.OrderDTO;
-import com.onlinemarket.rest.dto.order.OrderRequestDTO;
 import com.onlinemarket.rest.dto.order.OrderDetailsDTO;
+import com.onlinemarket.rest.dto.order.OrderRequestDTO;
 import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
-import com.onlinemarket.core.repo.OrderRepo;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 public class OrderService {
-    private OrderRepo orderRepo;
-    private ProductService productService;
-    private UserService userService;
+    private final OrderRepo orderRepo;
+    private final ProductService productService;
+    private final UserService userService;
 
     public OrderService(OrderRepo orderRepo, UserService userService, ProductService productService) {
         this.orderRepo = orderRepo;
@@ -75,14 +75,37 @@ public class OrderService {
     }
 
     public OrderDTO addOrder(OrderRequestDTO payload){
+        // check if user exists
+        try{
+            UserDTO user = userService.findById(payload.getCustomerId());
+        } catch(ResourceNotFoundException e){
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+        // check if all products exist
+        for(int i = 0; i < payload.getItems().size(); i++){
+            try {
+                ProductDTO product = productService.findById(payload.getItems().get(i));
+            } catch(ResourceNotFoundException e){
+                throw new ResourceNotFoundException(e.getMessage());
+            }
+        }
         Order order = orderRepo.save(payload.toEntity());
         return new OrderDTO(order);
     }
 
     public OrderDTO updateOrder(String id, OrderRequestDTO payload){
         Optional<Order> order = orderRepo.findOrderById(id);
+        UserDTO user = userService.findById(payload.getCustomerId());
         if(order.isEmpty()){
             throw new ResourceNotFoundException("Order with given ID doesn't exist");
+        }
+        //check if all products exist
+        for(int i = 0; i < payload.getItems().size(); i++){
+            try {
+                productService.findById(payload.getItems().get(i));
+            } catch(ResourceNotFoundException e){
+                throw new ResourceNotFoundException(e.getMessage());
+            }
         }
         Order updatedOrder = payload.toEntity();
         updatedOrder.setId(order.get().getId());
