@@ -95,7 +95,6 @@ public class OrderService {
 
     public OrderDTO updateOrder(String id, OrderRequestDTO payload){
         Optional<Order> order = orderRepo.findOrderById(id);
-        UserDTO user = userService.findById(payload.getCustomerId());
         if(order.isEmpty()){
             throw new ResourceNotFoundException("Order with given ID doesn't exist");
         }

@@ -44,8 +44,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/byCustomer")
-    public ResponseEntity<ApiResponse<List<OrderDetailsDTO>>> findByCustomer(@RequestParam String customerId){
+    @GetMapping("/byCustomer/{customerId}")
+    public ResponseEntity<ApiResponse<List<OrderDetailsDTO>>> findByCustomer(@PathVariable String customerId){
         try {
             return ResponseEntity
                     .ok(new ApiResponse<>(true, orderService.findByCustomerId(customerId)));
@@ -74,6 +74,8 @@ public class OrderController {
         } catch(ResourceNotFoundException error){
             return ResponseEntity
                     .status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
         }
     }
 

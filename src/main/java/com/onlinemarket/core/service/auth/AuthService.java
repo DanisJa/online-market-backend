@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,9 +46,13 @@ public class AuthService {
     }
 
     public UserLoginDTO signIn(UserLoginRequestDTO loginRequestDTO) throws BadCredentialsException {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword())
+            );
+        } catch (AuthenticationException e){
+            throw new BadCredentialsException(e.getMessage());
+        }
 
         User user = userRepo.findUserByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("This user does not exist."));
