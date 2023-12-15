@@ -1,6 +1,8 @@
 package com.onlinemarket;
 
-class OnlineMarketApplicationTests {
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
+class OnlineMarketApplicationTests {
 }
 

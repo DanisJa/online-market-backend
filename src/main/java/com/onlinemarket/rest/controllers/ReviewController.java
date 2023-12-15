@@ -1,6 +1,8 @@
 package com.onlinemarket.rest.controllers;
 
+import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
 import com.onlinemarket.core.service.ReviewService;
+import com.onlinemarket.rest.dto.responses.ApiResponse;
 import com.onlinemarket.rest.dto.review.ReviewDTO;
 import com.onlinemarket.rest.dto.review.ReviewDetailsDTO;
 import com.onlinemarket.rest.dto.review.ReviewRequestDTO;
@@ -21,26 +23,70 @@ public class ReviewController {
     public ReviewController(ReviewService reviewService) {this.reviewService = reviewService;}
 
     @GetMapping
-    public List<ReviewDetailsDTO> findAll(){return reviewService.findAll();}
+    public ApiResponse<List<ReviewDetailsDTO>> findAll(){
+        try {
+            return new ApiResponse<>(true, reviewService.findAll());
+        } catch(Exception error){
+            return new ApiResponse<>(false, error.getMessage());
+        }
+    }
 
     @GetMapping("/{id}")
-    public ReviewDetailsDTO findById(@PathVariable String id){return reviewService.findById(id);}
+    public ResponseEntity<ApiResponse<ReviewDetailsDTO>> findById(@PathVariable String id){
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, reviewService.findById(id)));
+        }catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
 
     @GetMapping("/byProduct")
     public List<ReviewDetailsDTO> findByProduct(@RequestParam String productId){return reviewService.findByProduct(productId);}
 
     @GetMapping("/byUser")
-    public List<ReviewDetailsDTO> findByUser(@RequestParam String userId){return reviewService.findByUser(userId);}
+    public ResponseEntity<ApiResponse<List<ReviewDetailsDTO>>> findByUser(@RequestParam String userId){
+        try{
+            return ResponseEntity.ok(new ApiResponse<>(true, reviewService.findByUser(userId)));
+        } catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
 
     @PostMapping
-    public ReviewDTO addReview(@RequestBody ReviewRequestDTO payload){return reviewService.addReview(payload);}
+    public ResponseEntity<ApiResponse<ReviewDTO>> addReview(@RequestBody ReviewRequestDTO payload){
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, reviewService.addReview(payload)));
+        }catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
 
     @PutMapping("/{id}")
-    public ReviewDTO updateReview(@RequestBody ReviewRequestDTO payload, @PathVariable String id){return reviewService.updateReview(id, payload);}
+    public ResponseEntity<ApiResponse<ReviewDTO>> updateReview(@RequestBody ReviewRequestDTO payload, @PathVariable String id){
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, reviewService.updateReview(id, payload)));
+        } catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteReview(@PathVariable String id){
-        reviewService.deleteReview(id);
+    public ResponseEntity<ApiResponse<String>> deleteReview(@PathVariable String id){
+        try {
+            reviewService.deleteReview(id);
+        } catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 }

@@ -1,10 +1,13 @@
 package com.onlinemarket.rest.controllers;
 
+import com.onlinemarket.core.exceptions.ApiExceptions.ConflictException;
+import com.onlinemarket.core.exceptions.general.BadRequestException;
+import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
 import com.onlinemarket.core.service.UserService;
+import com.onlinemarket.rest.dto.responses.ApiResponse;
 import com.onlinemarket.rest.dto.user.UserDTO;
 import com.onlinemarket.rest.dto.user.UserRequestDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,19 +23,48 @@ public class UserController {
     public UserController(UserService userService) {this.userService = userService;}
 
     @GetMapping
-    public List<UserDTO> findAll(){
-        return userService.findAll();
+    public ResponseEntity<ApiResponse<List<UserDTO>>> findAll(){
+        return ResponseEntity.ok(new ApiResponse<>(true, userService.findAll()));
     }
 
     @GetMapping("/{id}")
-    public UserDTO findById(@PathVariable String id) {return userService.findById(id);}
+    public ResponseEntity<ApiResponse<UserDTO>> findById(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, userService.findById(id)));
+        } catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@RequestBody UserRequestDTO payload, @PathVariable String id) {return userService.updateUser(id, payload);}
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestBody UserRequestDTO payload, @PathVariable String id) {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, userService.updateUser(id, payload)));
+        } catch(ResourceNotFoundException error){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch(BadRequestException error) {
+            return ResponseEntity.status(400).body(new ApiResponse<>(false, error.getMessage()));
+        } catch
+        (Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatusCode.valueOf(200));
+    public ResponseEntity<ApiResponse<String>> deleteUser(@PathVariable String id) {
+        try {
+            userService.deleteUser(id);
+        } catch(ConflictException error) {
+            return ResponseEntity.status(409).body(new ApiResponse<>(false, error.getMessage()));
+        } catch
+         (ResourceNotFoundException error) {
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch (Exception error) {
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Successfully deleted"));
     }
 }
