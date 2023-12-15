@@ -2,7 +2,6 @@ package com.onlinemarket.rest.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlinemarket.core.exceptions.ApiExceptions.ConflictException;
-import com.onlinemarket.core.exceptions.general.BadRequestException;
 import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
 import com.onlinemarket.core.service.UserService;
 import com.onlinemarket.rest.dto.user.UserRequestDTO;
@@ -54,7 +53,7 @@ public class UserControllerTests {
         when(userService.updateUser(any(String.class), any(UserRequestDTO.class))).thenThrow(ResourceNotFoundException.class);
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .contentType(objectMapper.writeValueAsString(new UserRequestDTO()))
+                .content(objectMapper.writeValueAsString(new UserRequestDTO()))
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -67,9 +66,9 @@ public class UserControllerTests {
 
     @Test
     void shouldReturnBadRequestForInvalidRequestBodyOnUpdate() throws Exception{
-        when(userService.updateUser(any(String.class), any(UserRequestDTO.class)))
-                .thenThrow(BadRequestException.class);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", userId))
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString("this is a bad request")))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 

@@ -34,15 +34,16 @@ public class AuthService {
 
     public UserDTO signUp(UserRequestDTO userRequestDTO){
         Optional<User> userWithSameEmail = userRepo.findUserByEmail(userRequestDTO.getEmail());
+        Optional<User> userWithSameUsername = userRepo.findUserByUsername(userRequestDTO.getUsername());
 
-        if(userWithSameEmail.isEmpty()) {
+        if(userWithSameEmail.isEmpty() && userWithSameUsername.isEmpty()) {
             userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
             User user = userRepo.save(userRequestDTO.toEntity());
 
             return new UserDTO(user);
         }
 
-        throw new UserAlreadyExistsException("User with same mail already exists.");
+        throw new UserAlreadyExistsException("User with same mail or username already exists.");
     }
 
     public UserLoginDTO signIn(UserLoginRequestDTO loginRequestDTO) throws BadCredentialsException {

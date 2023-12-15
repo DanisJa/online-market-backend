@@ -26,15 +26,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody UserRequestDTO payload){
+    public ResponseEntity<ApiResponse<UserDTO>> register(@RequestBody UserRequestDTO payload){
         try {
             if(!isValidEmail(payload.getEmail()) || payload.getUsername().isEmpty() || payload.getPassword().isEmpty()){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            return ResponseEntity.ok(authService.signUp(payload));
+            return ResponseEntity.ok(new ApiResponse<>(true, authService.signUp(payload)));
         } catch(UserAlreadyExistsException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new UserDTO());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(false, "Couldn't register user."));
+        } catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, e.getMessage()));
         }
+
     }
 
     @PostMapping("/login")
