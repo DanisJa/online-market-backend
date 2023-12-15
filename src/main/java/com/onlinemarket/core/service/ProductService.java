@@ -5,7 +5,6 @@ import com.onlinemarket.core.model.Product;
 import com.onlinemarket.core.repo.ProductRepo;
 import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.product.ProductRequestDTO;
-import com.onlinemarket.rest.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,8 +32,8 @@ public class ProductService {
         return new ProductDTO(product.get());
     }
 
-    public List<ProductDTO> findByCategory(String category){
-        List<Product> productList = productRepo.findProductsByCategory(category);
+    public List<ProductDTO> findByCategory(String categoryId){
+        List<Product> productList = productRepo.findProductsByCategory(categoryId);
 
         if(productList.isEmpty()){
             throw new ResourceNotFoundException("Products with given category do not exist.");
