@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>online-market</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-PRODUCTION</version>
     <name>online-market</name>
     <description>online-market</description>
     <properties>
