@@ -28,7 +28,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserDTO>> register(@RequestBody UserRequestDTO payload){
         try {
-            if(!isValidEmail(payload.getEmail()) || payload.getUsername().isEmpty() || payload.getPassword().isEmpty()){
+            if(!isValidEmail(payload.getEmail()) || payload.getUsername().isEmpty() || payload.getPassword().isEmpty() || payload.getPassword() == null || payload.getEmail() == null || payload.getUsername() == null || payload.getUserType() == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             return ResponseEntity.ok(new ApiResponse<>(true, authService.signUp(payload)));

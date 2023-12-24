@@ -2,6 +2,7 @@ package com.onlinemarket.rest.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlinemarket.core.exceptions.auth.UserAlreadyExistsException;
+import com.onlinemarket.core.model.enums.UserType;
 import com.onlinemarket.core.service.auth.AuthService;
 import com.onlinemarket.core.service.auth.JwtService;
 import com.onlinemarket.core.service.auth.UserAuthService;
@@ -49,6 +50,7 @@ public class AuthControllerTests {
         request.setEmail("test@test.test");
         request.setPassword("Test123");
         request.setUsername("Username");
+        request.setUserType(UserType.USER);
 
         Mockito.when(authService.signUp(any(UserRequestDTO.class))).thenThrow(UserAlreadyExistsException.class);
 
