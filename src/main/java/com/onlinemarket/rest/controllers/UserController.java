@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 @RestController
 @SecurityRequirement(name = "jwt-auth")

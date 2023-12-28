@@ -3,6 +3,7 @@ package com.onlinemarket.rest.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlinemarket.core.exceptions.auth.UserAlreadyExistsException;
 import com.onlinemarket.core.model.enums.UserType;
+import com.onlinemarket.core.service.UserService;
 import com.onlinemarket.core.service.auth.AuthService;
 import com.onlinemarket.core.service.auth.JwtService;
 import com.onlinemarket.core.service.auth.UserAuthService;
@@ -34,12 +35,15 @@ public class AuthControllerTests {
 
     @MockBean
     UserAuthService userAuthService;
+    @MockBean
+    JwtService jwtService;
+
+    @MockBean
+    UserService userService;
 
     @MockBean
     AuthService authService;
 
-    @MockBean
-    JwtService jwtService;
 
     @MockBean
     AuthenticationProvider authenticationProvider;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/products")
 @RestController
 @SecurityRequirement(name = "jwt-auth")
@@ -21,6 +21,7 @@ public class ProductController {
 
     public ProductController(ProductService productService) {this.productService = productService;}
 
+    @CrossOrigin(value = "*")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ProductDTO>>> findAll() {
         return ResponseEntity.ok(new ApiResponse<>(true, productService.findAll()));

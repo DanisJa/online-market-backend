@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
-@RequestMapping("api/orders")
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/orders")
 @RestController
 @SecurityRequirement(name = "jwt-auth")
 public class OrderController {
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {this.orderService = orderService;}
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<OrderDetailsDTO>>> findAll(){
@@ -44,13 +46,18 @@ public class OrderController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/byCustomer/{customerId}")
     public ResponseEntity<ApiResponse<List<OrderDetailsDTO>>> findByCustomer(@PathVariable String customerId){
         try {
             return ResponseEntity
                     .ok(new ApiResponse<>(true, orderService.findByCustomerId(customerId)));
         } catch (ResourceNotFoundException error){
+            System.out.println(error.getMessage());
             return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
+        } catch (Exception error){
+            System.out.println(error.getMessage());
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
         }
     }
 

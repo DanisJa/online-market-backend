@@ -33,6 +33,10 @@ public class OrderService {
     private List<OrderDetailsDTO> toOrderDetailsDTO(List<Order> orders) {
         List<OrderDetailsDTO> ordersWithDetails = new ArrayList<>();
 
+        if(orders.size() == 0) {
+            return ordersWithDetails;
+        }
+
         for(Order order : orders){
             UserDTO customer = userService.findById(order.getCustomerId());
             List<ProductDTO> items = new ArrayList<>();
@@ -68,7 +72,7 @@ public class OrderService {
         List<Order> orders = orderRepo.findOrdersByCustomerId(customerId);
 
         if(orders.isEmpty()){
-            throw new ResourceNotFoundException("Given customer does not have any orders");
+            return new ArrayList<>();
         }
 
         return toOrderDetailsDTO(orders);

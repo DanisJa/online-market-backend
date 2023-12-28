@@ -2,7 +2,9 @@ package com.onlinemarket.rest.controllers;
 
 import com.onlinemarket.core.exceptions.auth.UserAlreadyExistsException;
 import com.onlinemarket.core.exceptions.repository.ResourceNotFoundException;
+import com.onlinemarket.core.service.UserService;
 import com.onlinemarket.core.service.auth.AuthService;
+import com.onlinemarket.core.service.auth.JwtService;
 import com.onlinemarket.rest.dto.responses.ApiResponse;
 import com.onlinemarket.rest.dto.user.UserDTO;
 import com.onlinemarket.rest.dto.user.UserLoginDTO;
@@ -14,15 +16,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 @SecurityRequirement(name = "jwt-auth")
 public class AuthController {
     private final AuthService authService;
+    private final JwtService jwtService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtService jwtService, UserService userService) {
         this.authService = authService;
+        this.jwtService = jwtService;
+        this.userService = userService;
+    }
+
+    @GetMapping("/currentUser")
+    public ResponseEntity<ApiResponse<UserDTO>> getCurrentUser(@RequestHeader("Authorization") String jwtWithBearer){
+        try{
+            String jwt = jwtWithBearer.replace("Bearer ", "");
+            String username = jwtService.extractUserName(jwt);
+            UserDTO currentUser = userService.findByUsernameOrEmail(username);
+            return ResponseEntity.ok(new ApiResponse<>(true, currentUser));
+        } catch(ResourceNotFoundException exception){
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, exception.getMessage()));
+        } catch (Exception exception){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, exception.getMessage()));
+        }
     }
 
     @PostMapping("/register")

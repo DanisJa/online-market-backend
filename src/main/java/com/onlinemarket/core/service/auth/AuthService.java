@@ -9,6 +9,7 @@ import com.onlinemarket.rest.dto.user.UserLoginDTO;
 import com.onlinemarket.rest.dto.user.UserLoginRequestDTO;
 import com.onlinemarket.rest.dto.user.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,9 @@ public class AuthService {
     private JwtService jwtService;
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Value("${security.jwt.secret}")
+    String tokenSecret;
 
     public AuthService(UserRepo userRepo) {
         this.userRepo = userRepo;

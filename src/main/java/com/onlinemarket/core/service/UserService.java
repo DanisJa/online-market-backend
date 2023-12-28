@@ -33,6 +33,14 @@ public class UserService {
         return users.stream().map(UserDTO::new).collect(toList());
     }
 
+    public UserDTO findByUsernameOrEmail(String usernameOrEmail){
+        Optional<User> userObj = userRepo.findByUsernameOrEmail(usernameOrEmail);
+        if(userObj.isEmpty()){
+            throw new ResourceNotFoundException("User with given name or email doesn't exist.");
+        }
+        return new UserDTO(userObj.get());
+    }
+
     public UserDTO findById(String id) {
         Optional<User> userObj = userRepo.findById(id);
         if(userObj.isEmpty()){
