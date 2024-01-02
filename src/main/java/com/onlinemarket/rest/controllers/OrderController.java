@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/orders")
+@CrossOrigin(origins = "localhost:5173")
 @RestController
+@RequestMapping("/api/orders")
 @SecurityRequirement(name = "jwt-auth")
 public class OrderController {
     private final OrderService orderService;
