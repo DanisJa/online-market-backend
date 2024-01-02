@@ -30,7 +30,7 @@ public class OrderService {
         this.productService = productService;
     }
 
-    private List<OrderDetailsDTO> toOrderDetailsDTO(List<Order> orders) {
+    private List<OrderDetailsDTO> toOrdersDetailsDTO(List<Order> orders) {
         List<OrderDetailsDTO> ordersWithDetails = new ArrayList<>();
 
         if(orders.size() == 0) {
@@ -50,6 +50,19 @@ public class OrderService {
         return ordersWithDetails;
     }
 
+    private OrderDetailsDTO toOrderDetailsDTO(Order order) {
+    UserDTO customer = userService.findById(order.getCustomerId());
+    List<ProductDTO> items = new ArrayList<>();
+
+    for(String id : order.getItems()){
+        ProductDTO product = productService.findById(id);
+        items.add(product);
+    }
+
+    OrderDetailsDTO orderDetails = new OrderDetailsDTO(order, customer, items);
+    return orderDetails;
+    }
+
     public List<OrderDTO> findAll(){
         List<Order> orders = orderRepo.findAll();
         return orders.stream().map(OrderDTO::new).collect(toList());
@@ -57,15 +70,15 @@ public class OrderService {
 
     public List<OrderDetailsDTO> findAllWithDetails(){
         List<Order> orders = orderRepo.findAll();
-        return toOrderDetailsDTO(orders);
+        return toOrdersDetailsDTO(orders);
     }
 
-    public OrderDTO findById(String id){
+    public OrderDetailsDTO findById(String id){
         Optional<Order> order = orderRepo.findOrderById(id);
         if(order.isEmpty()){
             throw new ResourceNotFoundException("Order with given ID does not exist.");
         }
-        return new OrderDTO(order.get());
+        return this.toOrderDetailsDTO(order.get());
     }
 
     public List<OrderDetailsDTO> findByCustomerId(@RequestBody String customerId){
@@ -75,7 +88,7 @@ public class OrderService {
             return new ArrayList<>();
         }
 
-        return toOrderDetailsDTO(orders);
+        return toOrdersDetailsDTO(orders);
     }
 
     public OrderDTO addOrder(OrderRequestDTO payload){

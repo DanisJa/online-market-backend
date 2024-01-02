@@ -33,7 +33,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                 req -> req
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
@@ -41,10 +41,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/orders/**").permitAll()
                         .requestMatchers("/api/users/**").authenticated()
-//                        .requestMatchers("/api/orders/**").authenticated()
+                        .requestMatchers("/api/orders/**").authenticated()
                         .requestMatchers("/api/reviews/**").authenticated()
                         .requestMatchers("/api/products/**").authenticated()
+                        .requestMatchers("/api/auth/**").authenticated()
                         .anyRequest().permitAll()
         ).sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())

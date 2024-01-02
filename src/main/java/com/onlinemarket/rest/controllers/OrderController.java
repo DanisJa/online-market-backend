@@ -36,7 +36,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<OrderDTO>> findById(@PathVariable String id){
+    public ResponseEntity<ApiResponse<OrderDetailsDTO>> findById(@PathVariable String id){
         try {
             return ResponseEntity
                     .ok(new ApiResponse<>(true, orderService.findById(id)));

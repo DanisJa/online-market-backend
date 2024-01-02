@@ -7,7 +7,9 @@ import com.onlinemarket.core.model.enums.OrderStatus;
 import com.onlinemarket.core.repo.OrderRepo;
 import com.onlinemarket.core.service.OrderService;
 import com.onlinemarket.rest.dto.order.OrderDTO;
+import com.onlinemarket.rest.dto.order.OrderDetailsDTO;
 import com.onlinemarket.rest.dto.order.OrderRequestDTO;
+import com.onlinemarket.rest.dto.user.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +64,7 @@ class OrderControllerTests {
         // Arrange
         OrderDTO order = new OrderDTO(new Order());
         String orderId = "1";
-        when(orderService.findById(orderId)).thenReturn(order);
+        when(orderService.findById(orderId)).thenReturn(new OrderDetailsDTO(new Order(), new UserDTO(), List.of()));
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/{id}", orderId))
