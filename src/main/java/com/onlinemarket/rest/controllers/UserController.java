@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 @RestController
 @SecurityRequirement(name = "jwt-auth")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {this.userService = userService;}
 

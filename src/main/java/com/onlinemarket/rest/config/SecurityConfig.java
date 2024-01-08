@@ -60,6 +60,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedOrigin("http://192.168.1.4:5173/");
         configuration.addAllowedMethod(HttpMethod.GET.name());
         configuration.addAllowedMethod(HttpMethod.POST.name());
         configuration.addAllowedMethod(HttpMethod.HEAD.name());
@@ -68,7 +69,6 @@ public class SecurityConfig {
         configuration.addAllowedMethod(HttpMethod.OPTIONS.name());
         configuration.addAllowedMethod(HttpMethod.PATCH.name());
         configuration.addAllowedMethod(HttpMethod.TRACE.name());
-
 
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
