@@ -27,8 +27,8 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse<>(true, productService.findAll()));
     }
 
-    @GetMapping("/byCategory")
-    public ResponseEntity<ApiResponse<List<ProductDTO>>> findByCategoryId(@RequestParam String categoryId){
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<ApiResponse<List<ProductDTO>>> findByCategoryId(@PathVariable String categoryId){
         try {
             return ResponseEntity.ok(new ApiResponse<>(true, productService.findByCategory(categoryId)));
         } catch(ResourceNotFoundException error){

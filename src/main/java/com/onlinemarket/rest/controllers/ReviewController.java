@@ -42,8 +42,8 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/byProduct")
-    public List<ReviewDetailsDTO> findByProduct(@RequestParam String productId){return reviewService.findByProduct(productId);}
+    @GetMapping("/product/{productId}")
+    public List<ReviewDetailsDTO> findByProduct(@PathVariable String productId){return reviewService.findByProduct(productId);}
 
     @GetMapping("/byUser")
     public ResponseEntity<ApiResponse<List<ReviewDetailsDTO>>> findByUser(@RequestParam String userId){
@@ -82,12 +82,12 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<String>> deleteReview(@PathVariable String id){
         try {
             reviewService.deleteReview(id);
+            return new ResponseEntity<>(HttpStatusCode.valueOf(200));
         } catch(ResourceNotFoundException error){
             return ResponseEntity.status(404).body(new ApiResponse<>(false, error.getMessage()));
         } catch(Exception error){
             return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
         }
-        return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 }
 
