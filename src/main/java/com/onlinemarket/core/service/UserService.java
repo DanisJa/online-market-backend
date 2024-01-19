@@ -63,7 +63,7 @@ public class UserService {
     public UserDTO updateUser (String id, UserRequestDTO payload) {
         Optional<User> user = userRepo.findUserById(id);
 
-        if(!(payload instanceof UserRequestDTO)){
+        if(payload == null){
             throw new BadRequestException("Request body not matching the expected type");
         }
 
@@ -71,6 +71,7 @@ public class UserService {
             throw new ResourceNotFoundException("User with given ID doesn't exist.");
         }
         User updatedUser = payload.toEntity();
+        updatedUser.setPassword(user.get().getPassword());
         updatedUser.setId(user.get().getId());
         updatedUser = userRepo.save(updatedUser);
         return new UserDTO(updatedUser);

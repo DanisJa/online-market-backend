@@ -1,11 +1,7 @@
 package com.onlinemarket.rest.dto.order;
 
 import com.onlinemarket.core.model.Order;
-import com.onlinemarket.core.model.Product;
-import com.onlinemarket.core.model.User;
 import com.onlinemarket.core.model.enums.OrderStatus;
-import com.onlinemarket.rest.dto.product.ProductDTO;
-import com.onlinemarket.rest.dto.user.UserDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -27,7 +23,7 @@ public class OrderRequestDTO {
         Order order = new Order();
         order.setCreatedAt(new Date());
         order.setCustomerId(this.customerId);
-        order.setStatus(OrderStatus.PENDING);
+        order.setStatus(this.status);
         order.setItems(this.items);
         return order;
     }
