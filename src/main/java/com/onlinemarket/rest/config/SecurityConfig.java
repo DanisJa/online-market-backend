@@ -60,8 +60,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:5173");
-        configuration.addAllowedMethod("http://localhost:4173");
-        configuration.addAllowedMethod("http://localhost:4174");
+        configuration.addAllowedOrigin("https://online-market-frontend.onrender.com");
         configuration.addAllowedMethod(HttpMethod.GET.name());
         configuration.addAllowedMethod(HttpMethod.POST.name());
         configuration.addAllowedMethod(HttpMethod.HEAD.name());
