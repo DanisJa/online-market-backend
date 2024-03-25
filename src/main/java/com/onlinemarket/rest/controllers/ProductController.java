@@ -7,6 +7,8 @@ import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.product.ProductRequestDTO;
 import com.onlinemarket.rest.dto.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +22,41 @@ public class ProductController {
 
     public ProductController(ProductService productService) {this.productService = productService;}
 
-    @CrossOrigin(value = "*")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ProductDTO>>> findAll() {
         return ResponseEntity.ok(new ApiResponse<>(true, productService.findAll()));
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<ApiResponse<List<ProductDTO>>> findAllByPage(
+                                                                        @RequestParam(defaultValue = "0") int page,
+                                                                        @RequestParam(defaultValue = "3") int size){
+        try{
+            Pageable paging = PageRequest.of(page, size);
+            return ResponseEntity.ok(new ApiResponse<>(true, productService.findAllWithPagination(paging)));
+        }catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse(false, error.getMessage()));
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<ProductDTO>>> findBySearch(
+            @RequestParam(defaultValue = "") String name
+    ){
+        try{
+            return ResponseEntity.ok(new ApiResponse<>(true, productService.findAllWithSearch(name)));
+        }catch(Exception error){
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, error.getMessage()));
+        }
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponse<Integer>> countProducts(){
+        try{
+            return ResponseEntity.ok(new ApiResponse<>(true, productService.countTotalProducts()));
+        } catch(Exception error){
+            return ResponseEntity.ok(new ApiResponse<>(false, error.getMessage()));
+        }
     }
 
     @GetMapping("/category/{categoryId}")

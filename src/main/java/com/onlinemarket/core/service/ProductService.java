@@ -5,6 +5,8 @@ import com.onlinemarket.core.model.Product;
 import com.onlinemarket.core.repo.ProductRepo;
 import com.onlinemarket.rest.dto.product.ProductDTO;
 import com.onlinemarket.rest.dto.product.ProductRequestDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +23,22 @@ public class ProductService {
 
     public List<ProductDTO> findAll() {
         List<Product> products = productRepo.findAll();
+        return products.stream().map(ProductDTO::new).collect(toList());
+    }
+
+    public List<ProductDTO> findAllWithPagination(Pageable pageable){
+        Page<Product> products = productRepo.findAll(pageable);
+
+        return products.stream().map(ProductDTO::new).collect(toList());
+    }
+
+    public int countTotalProducts(){
+        return (int) productRepo.count();
+    }
+
+    public List<ProductDTO> findAllWithSearch(String searchString){
+        List<Product> products = productRepo.findByNameContains(searchString);
+
         return products.stream().map(ProductDTO::new).collect(toList());
     }
 
