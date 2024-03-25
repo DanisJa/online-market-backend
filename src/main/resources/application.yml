@@ -1,0 +1,19 @@
+configuration:
+  swagger:
+    app: 'Online Market'
+    description: 'Online Market where you can sell anything!'
+    developer: 'Danis Jusić'
+    email: 'danisjusic@icloud.com'
+
+spring:
+  data:
+    mongodb:
+      database: 'online-market'
+      uri: 'mongodb+srv://danisjusic:bfmA4y1EhMmxS2Ip@webengineering.oxxlfww.mongodb.net/?retryWrites=true&w=majority'
+
+security:
+  jwt:
+    secret: 'thisismysecretletskeepitthatwaybutthisisstilltooshortforsomereasonsocanthiskeygetanylongernoitcannotiwillstoprighthere'
+
+server:
+  port: 80
